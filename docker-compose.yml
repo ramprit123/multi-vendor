@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: mongo:latest # Or mongodb/mongodb-community-server:latest
+    container_name: my-mongo-db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sahani
+      MONGO_INITDB_ROOT_PASSWORD: plumtree
+    volumes:
+      - mongo_data:/data/db # Named volume for persistence
+    restart: unless-stopped # Automatically restart the container unless explicitly stopped
+
+volumes:
+  mongo_data:
