@@ -74,7 +74,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    categories: {
+      subCategories: 'categories';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -169,6 +173,10 @@ export interface Category {
    */
   title: string;
   /**
+   * URL-friendly version of the title (auto-generated if not provided)
+   */
+  slug: string;
+  /**
    * Brief description of the category
    */
   description?: string | null;
@@ -176,6 +184,59 @@ export interface Category {
    * Category image
    */
   image?: (string | null) | Media;
+  /**
+   * Icon class or name (e.g., fas fa-shopping-cart)
+   */
+  icon?: string | null;
+  /**
+   * Category color (hex code, e.g., #FF5733)
+   */
+  color?: string | null;
+  /**
+   * Parent category (leave empty for top-level category)
+   */
+  parent?: (string | null) | Category;
+  /**
+   * Sub-categories under this category
+   */
+  subCategories?: {
+    docs?: (string | Category)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * SEO and metadata information
+   */
+  metadata?: {
+    /**
+     * SEO title for this category
+     */
+    metaTitle?: string | null;
+    /**
+     * SEO description for this category
+     */
+    metaDescription?: string | null;
+    /**
+     * Comma-separated keywords for SEO
+     */
+    keywords?: string | null;
+  };
+  /**
+   * Whether this category is active and visible
+   */
+  isActive?: boolean | null;
+  /**
+   * Mark as featured category
+   */
+  isFeatured?: boolean | null;
+  /**
+   * Sort order for displaying categories (lower numbers appear first)
+   */
+  sortOrder?: number | null;
+  /**
+   * Number of products in this category (auto-calculated)
+   */
+  productCount?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -286,8 +347,24 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   description?: T;
   image?: T;
+  icon?: T;
+  color?: T;
+  parent?: T;
+  subCategories?: T;
+  metadata?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        keywords?: T;
+      };
+  isActive?: T;
+  isFeatured?: T;
+  sortOrder?: T;
+  productCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }
